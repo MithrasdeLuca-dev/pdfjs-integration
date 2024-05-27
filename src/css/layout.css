@@ -6,44 +6,41 @@ body {
     flex-direction: column;
     height: 100vh;
 }
-#toolbarContainer {
-    width: 100%;
-    height: 40px;
-    background-color: #38383d;
-    border-bottom: 1px solid ;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-}
-.toolbarButton {
-    margin-right: 10px;
-    cursor: pointer;
-}
+
 #page_num {
-    width: 50px;
+    width: 30px;
     text-align: center;
 }
+
 #mainContainer {
     display: flex;
     flex: 1;
     overflow: hidden;
 }
+
 #thumbnailContainer {
     display: flex;
     flex-direction: column;
     justify-self: center;
     width: 200px;
     background-color: #38383d;
-    border-right: 1px solid ;
+    border-right: 1px solid;
     overflow-y: scroll;
+    transition: width 0.3s;
 }
+
+#thumbnailContainer.recolher {
+    width: 0;
+    display: none;
+}
+
 .thumbnail {
     display: flex;
     cursor: pointer;
     justify-content: center;
     padding: 5px;
-    cursor: pointer;
 }
+
 .thumbnail img {
     width: 100%;
 }
@@ -57,20 +54,10 @@ body {
     right: 0;
     bottom: 0;
     background-color: #38383d !important;
-}
-#secondaryToolbar {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    width: 200px;
-    background-color: 38383d;
-    border-left: 1px solid ;
-    display: none;
-    flex-direction: column;
-    padding: 10px;
-}
-.secondaryToolbarButton {
-    margin-bottom: 10px;
-    cursor: pointer;
+    transition: left 0.3s, width 0.3s;
 }
 
+#viewerContainer.recolher {
+    left: 0;
+    width: 100%;
+}

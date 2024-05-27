@@ -117,31 +117,13 @@ eventBus.on('pagechanging', (evt) => {
     document.getElementById('page_num').value = evt.pageNumber;
 });
 
-// Secondary toolbar buttons
-document.getElementById('toggleSecondaryToolbar').addEventListener('click', () => {
-    const secondaryToolbar = document.getElementById('secondaryToolbar');
-    secondaryToolbar.style.display = secondaryToolbar.style.display === 'none' ? 'flex' : 'none';
-});
-
-document.getElementById('secondaryClose').addEventListener('click', () => {
-    document.getElementById('secondaryToolbar').style.display = 'none';
-});
-
-   // Toggle thumbnails functionality
+// Toggle thumbnails functionality
 const sidebarToggleBtn = document.getElementById('sidebarToggle');
-
 sidebarToggleBtn.addEventListener('click', () => {
     const thumbnailContainer = document.getElementById('thumbnailContainer');
     const viewerContainer = document.getElementById('viewerContainer');
-    if (thumbnailContainer.classList.contains('hidden')) {
-        thumbnailContainer.classList.remove('hidden');
-        viewerContainer.style.marginLeft = '200px';
-        thumbnailContainer.style.marginLeft = '-200px';
-        thumbnailContainer.style.display = 'none';
-        } else {
-        thumbnailContainer.classList.add('hidden');
-        viewerContainer.style.marginLeft = '0';
-    }
+    thumbnailContainer.classList.toggle('recolher');
+    viewerContainer.classList.toggle('recolher');
 });
 
 window.addEventListener('resize', () => {
