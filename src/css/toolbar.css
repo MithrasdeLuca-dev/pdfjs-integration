@@ -1,4 +1,3 @@
-
 #toolbarContainer {
     width: 100%;
     height: 40px;
@@ -10,12 +9,6 @@
     padding: 0 10px;
 }
 
-.toolbarButton {
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-
 .toolbarSection {
     display: flex;
     align-items: center;
@@ -23,3 +16,76 @@
     margin-right: 20px;
 }
 
+.toolbarButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 16px;
+    border-radius: 4px; 
+    padding: 5px; 
+    transition: background-color 0.3s ease;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.toolbarButton i {
+    color: #fff;
+}
+
+.toolbarButton:hover {
+    background-color: #4a4a4f; 
+}
+
+.toolbarField {
+    width: 50px;
+    text-align: center;
+    margin: 0 5px;
+    background-color: #38383d;
+    color: #fff;
+    border: 1px solid #888;
+    border-radius: 4px; 
+    padding: 2px 5px;
+}
+
+#scaleSelect {
+    margin: 0 10px 0 0;
+    background-color: #4a4a4f; 
+    color: #fff;
+    border: none;
+    border-radius: 4px; 
+    padding: 2px 5px;
+    outline:none;
+    transition: background-color 0.3s ease;
+}
+
+#scaleSelect:hover {
+    background-color: #666667;
+}
+
+#pageNumber{
+    background-color: #404044;
+    outline: none;
+}
+
+#findBox {
+    display: flex;
+    align-items: center;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.search-text {
+    display: none;
+    background: none;
+    color: #fff;
+    border: none;
+    padding: 5px;
+    width: 200px; /* Largura da caixa de pesquisa */
+    outline: none; /* Remove a linha de foco */
+    margin-left: 5px;
+}
+#numPages{
+    color: #fff;
+}
