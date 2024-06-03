@@ -16,17 +16,17 @@ const pdfViewer = new pdfjsViewer.PDFViewer({
 let pdfDocument = null;
 let currentRotation = 0;
 
-pdfjsLib.getDocument(url).promise.then(function(pdfDoc) {
+pdfjsLib.getDocument(url).promise.then(function (pdfDoc) {
     pdfDocument = pdfDoc;
     pdfViewer.setDocument(pdfDoc);
-    document.getElementById('numPages').textContent ="/ " + pdfDoc.numPages;
+    document.getElementById('numPages').textContent = "/ " + pdfDoc.numPages;
     renderThumbnails(pdfDoc);
 });
 
 function renderThumbnails(pdfDoc) {
     const promises = [];
     for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-        promises.push(pdfDoc.getPage(pageNum).then(function(page) {
+        promises.push(pdfDoc.getPage(pageNum).then(function (page) {
             const viewport = page.getViewport({ scale: 0.2 });
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -37,7 +37,7 @@ function renderThumbnails(pdfDoc) {
                 canvasContext: context,
                 viewport: viewport
             };
-            return page.render(renderContext).promise.then(function() {
+            return page.render(renderContext).promise.then(function () {
                 const thumbnail = document.createElement('div');
                 thumbnail.className = 'thumbnail';
                 thumbnail.appendChild(canvas);
@@ -144,14 +144,9 @@ document.getElementById('search-text').addEventListener('keydown', (event) => {
 });
 
 const findTextInPDF = (searchTerm) => {
-    const iframeDocument = document.getElementById('pdf-js-viewer').contentWindow;
-    iframeDocument.PDFViewerApplication.eventBus.dispatch('find', {
-        source: iframeDocument,
+    console.log(pdfViewer);
+    pdfViewer.eventBus.dispatch('find', {
         type: '',
-        caseSensitive: false,
-        findPrevious: undefined,
-        highlightAll: true,
-        phraseSearch: true,
         query: searchTerm
     });
 };
@@ -174,4 +169,50 @@ sidebarToggleBtn.addEventListener('click', () => {
 
 window.addEventListener('resize', () => {
     pdfViewer.currentScaleValue = 'page-width';
+});
+
+window.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey && (event.key === 'p' || event.key === 's' || event.key === 'c')) ||
+        (event.key === 'Insert' && event.ctrlKey)) {
+        event.preventDefault();
+        alert('Este comando foi desativado.');
+    }
+});
+
+const userPermissions = {
+    canDownload: true,
+    canPrint: true
+
+}
+
+if (!userPermissions.canDownload) {
+    const downloadButton = document.getElementById('download');
+    downloadButton.disabled = true;
+    downloadButton.style.display = 'none';
+}
+
+if (!userPermissions.canPrint) {
+    const printButton = document.getElementById('print');
+    printButton.disabled = true;
+    printButton.style.display = 'none';
+}
+
+document.getElementById('fullScreen').addEventListener('click', () => {
+    const elem = document.getElementById('viewerContainer');
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { // Firefox
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { // IE/Edge
+        elem.msRequestFullscreen();
+    }
+    elem.style.overflow = 'auto';
+});
+
+document.addEventListener('fullscreenchange', (event) => {
+    if (!document.fullscreenElement) {
+        pdfViewer.currentScaleValue = 'auto';
+    }
 });
