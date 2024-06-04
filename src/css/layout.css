@@ -22,11 +22,10 @@ body {
 #thumbnailContainer {
     display: flex;
     flex-direction: column;
-    justify-self: center;
     width: 200px;
     background-color: #38383d;
-    border-right: px solid;
-    overflow-y: scroll;
+    border-right: 1px solid;
+    overflow-y: auto;
     transition: width 0.3s;
 }
 
@@ -40,10 +39,11 @@ body {
     cursor: pointer;
     justify-content: center;
     padding: 5px;
+    box-sizing: border-box;
 }
 
-.thumbnail img {
-    width: 100%;
+.thumbnail.active {
+    background-color: #555558;
 }
 
 #viewerContainer {

@@ -44,6 +44,7 @@ function renderThumbnails(pdfDoc) {
                 thumbnail.addEventListener('click', () => {
                     pdfViewer.currentPageNumber = pageNum;
                 });
+                thumbnail.dataset.pageNumber = pageNum;
                 return thumbnail;
             });
         }));
@@ -53,10 +54,65 @@ function renderThumbnails(pdfDoc) {
         thumbnails.forEach(thumbnail => {
             thumbnailContainer.appendChild(thumbnail);
         });
+        highlightCurrentThumbnail(pdfViewer.currentPageNumber);
     });
 }
 
-// Toolbar buttons
+function highlightCurrentThumbnail(pageNumber) {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    thumbnails.forEach(thumbnail => {
+        if (parseInt(thumbnail.dataset.pageNumber) === pageNumber) {
+            thumbnail.classList.add('active');
+            scrollToThumbnail(thumbnail);
+        } else {
+            thumbnail.classList.remove('active');
+        }
+    });
+}
+
+function scrollToThumbnail(thumbnail) {
+    const toolbarHeight = 45; // Altura da toolbar em pixels
+    const thumbnailContainer = document.getElementById('thumbnailContainer');
+    const containerTop = thumbnailContainer.scrollTop;
+    const containerBottom = containerTop + thumbnailContainer.clientHeight;
+    const thumbnailTop = thumbnail.offsetTop - toolbarHeight; // Subtrai a altura da toolbar
+    const thumbnailBottom = thumbnailTop + thumbnail.clientHeight;
+
+    if (thumbnailTop < containerTop) {
+        thumbnailContainer.scrollTo({
+            top: thumbnailTop,
+            behavior: 'smooth' // Adiciona rolagem suave
+        });
+    } else if (thumbnailBottom > containerBottom) {
+        thumbnailContainer.scrollTo({
+            top: thumbnailBottom - thumbnailContainer.clientHeight,
+            behavior: 'smooth' // Adiciona rolagem suave
+        });
+    }
+}
+
+function scrollToPage(pageNumber) {
+    const toolbarHeight = 60; // Altura da toolbar em pixels
+    const pageElement = document.querySelector(`[data-page-number="${pageNumber}"]`);
+    if (pageElement) {
+        const offsetTop = pageElement.offsetTop - toolbarHeight;
+        window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Eventos da Toolbar
+
+const sidebarToggleBtn = document.getElementById('sidebarToggle');
+sidebarToggleBtn.addEventListener('click', () => {
+    const thumbnailContainer = document.getElementById('thumbnailContainer');
+    const viewerContainer = document.getElementById('viewerContainer');
+    thumbnailContainer.classList.toggle('recolher');
+    viewerContainer.classList.toggle('recolher');
+});
+
 document.getElementById('firstPage').addEventListener('click', () => {
     pdfViewer.currentPageNumber = 1;
 });
@@ -136,7 +192,6 @@ document.getElementById('search-icon').addEventListener('click', () => {
 document.getElementById('search-text').addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         const searchTerm = event.target.value;
-        console.log(searchTerm);
         if (searchTerm) {
             findTextInPDF(searchTerm);
         }
@@ -144,7 +199,6 @@ document.getElementById('search-text').addEventListener('keydown', (event) => {
 });
 
 const findTextInPDF = (searchTerm) => {
-    console.log(pdfViewer);
     pdfViewer.eventBus.dispatch('find', {
         type: '',
         query: searchTerm
@@ -157,14 +211,8 @@ eventBus.on('pagesinit', () => {
 
 eventBus.on('pagechanging', (evt) => {
     document.getElementById('pageNumber').value = evt.pageNumber;
-});
-
-const sidebarToggleBtn = document.getElementById('sidebarToggle');
-sidebarToggleBtn.addEventListener('click', () => {
-    const thumbnailContainer = document.getElementById('thumbnailContainer');
-    const viewerContainer = document.getElementById('viewerContainer');
-    thumbnailContainer.classList.toggle('recolher');
-    viewerContainer.classList.toggle('recolher');
+    highlightCurrentThumbnail(evt.pageNumber);
+    scrollToPage(evt.pageNumber);
 });
 
 window.addEventListener('resize', () => {
@@ -182,7 +230,6 @@ window.addEventListener('keydown', (event) => {
 const userPermissions = {
     canDownload: true,
     canPrint: true
-
 }
 
 if (!userPermissions.canDownload) {
