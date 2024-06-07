@@ -7,6 +7,10 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 10px;
+    position: relative;
+    /* Adicionado para posicionamento relativo da findBar */
+    z-index: 10;
+    /* Garantir que a toolbar esteja acima do conteúdo do PDF */
 }
 
 .toolbarSection {
@@ -23,11 +27,11 @@
     cursor: pointer;
     margin-right: 10px;
     font-size: 16px;
-    border-radius: 4px; 
-    padding: 5px; 
+    border-radius: 4px;
+    padding: 5px;
     transition: background-color 0.3s ease;
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     justify-content: center;
 }
 
@@ -36,7 +40,7 @@
 }
 
 .toolbarButton:hover {
-    background-color: #4a4a4f; 
+    background-color: #4a4a4f;
 }
 
 .toolbarField {
@@ -46,19 +50,19 @@
     background-color: #38383d;
     color: #fff;
     border: 1px solid #888;
-    border-radius: 4px; 
+    border-radius: 4px;
     padding: 2px 5px;
 }
 
 #scaleSelect {
     margin: 0 10px 0 0;
-    background-color: #4a4a4f; 
+    background-color: #4a4a4f;
     color: #fff;
     border: none;
-    border-radius: 4px; 
+    border-radius: 4px;
     height: 100%;
     padding: 0 10px 0 0;
-    outline:none;
+    outline: none;
     transition: background-color 0.3s ease;
 }
 
@@ -66,7 +70,7 @@
     background-color: #666667;
 }
 
-#pageNumber{
+#pageNumber {
     background-color: #404044;
     outline: none;
 }
@@ -78,16 +82,67 @@
     position: relative;
 }
 
-.search-text {
-    display: none;
-    background: none;
+#findInput {
+    background-color: #404044;
     color: #fff;
-    border: none;
+    border-radius: 2px;
+    border: 1px solid #737373;
     padding: 5px;
-    width: 200px; /* Largura da caixa de pesquisa */
-    outline: none; /* Remove a linha de foco */
-    margin-left: 5px;
+    width: 200px;
+    /* Largura da caixa de pesquisa */
+    outline: none;
+    /* Remove a linha de foco */
 }
-#numPages{
+
+#numPages {
     color: #fff;
+}
+
+#download,
+#print {
+    display: none;
+}
+
+.findBar {
+    display: none;
+
+    position: absolute;
+    top: 45px;
+    /* Ajuste para ficar logo abaixo da toolbar */
+    left: 52px;
+    /* Ajuste conforme necessário */
+    background-color: #38383D;
+    border-radius: 2px;
+    padding: 1px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    /* Garantir que a findBar esteja acima do conteúdo do PDF */
+}
+
+.findBar-arrow {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    /* Ajuste conforme necessário */
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #38383D;
+    /* Cor de fundo da seta */
+}
+
+
+.findBar-content {
+    display: flex;
+    align-items: center;
+    margin-right: 10px
+}
+
+.findBar-content input {
+    margin-right: 10px;
+}
+
+.findBar-content button {
+    margin-right: 5px;
 }

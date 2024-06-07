@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf_viewer.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/toolbar.css"> 
+    <link rel="stylesheet" href="../css/toolbar.css">
 </head>
+
 <body>
     <div id="toolbarContainer">
         <div class="toolbarSection">
             <button id="sidebarToggle" class="toolbarButton" title="Exibir/ocultar painel lateral" tabindex="11">
                 <i class="fas fa-bars"></i>
             </button>
+            <input type="checkbox" id="permission" name="permission" value="true" class="toolbarButton"
+                title="Permitir/Não permitir">
             <div id="findBox" class="toolbarButton" title="Procurar no documento" tabindex="12">
                 <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
-                <input id="search-text" class="search-text" type="text" placeholder="Faça sua pesquisa">
             </div>
         </div>
-        
+        <div id="findBar" class="findBar">
+            <div class="findBar-arrow"></div>
+            <div class="findBar-content">
+                <input id="findInput" type="text" placeholder="Pesquisar no documento">
+                <button id="findPrevious" class="toolbarButton">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+                <button id="findNext" class="toolbarButton">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+                <span id="findResultsCount"></span>
+            </div>
+        </div>
+
         <div class="toolbarSection">
             <button id="firstPage" class="toolbarButton" title="Primeira página" tabindex="13">
                 <i class="fas fa-angle-double-left"></i>
@@ -28,12 +44,13 @@
             <button id="previous" class="toolbarButton" title="Página anterior" tabindex="14">
                 <i class="fas fa-angle-up"></i>
             </button>
-            
+
             <div class="toolbarSection">
-                <span><input type="number" id="pageNumber" class="toolbarField" title="Página" value="1" min="1" tabindex="15" autocomplete="off">
-                <span id="numPages"></span></span>
+                <span><input type="number" id="pageNumber" class="toolbarField" title="Página" value="1" min="1"
+                        tabindex="15" autocomplete="off">
+                    <span id="numPages"></span></span>
             </div>
-            
+
             <button id="next" class="toolbarButton" title="Próxima página" tabindex="16">
                 <i class="fas fa-angle-down"></i>
             </button>
@@ -41,7 +58,7 @@
                 <i class="fas fa-angle-double-right"></i>
             </button>
         </div>
-        
+
         <div class="toolbarSection">
             <button id="zoomOut" class="toolbarButton" title="Reduzir" tabindex="21">
                 <i class="fas fa-minus"></i>
@@ -73,13 +90,14 @@
             </button>
         </div>
         <div class="toolbarSection">
-            <button id="download" class="toolbarButton" title="Salvar" tabindex="42">
+            <button id="download" class="toolbarButton" title="Salvar" tabindex="42" disabled>
                 <i class="fas fa-download"></i>
             </button>
-            <button id="print" class="toolbarButton" title="Imprimir" tabindex="41">
+            <button id="print" class="toolbarButton" title="Imprimir" tabindex="41" disabled>
                 <i class="fas fa-print"></i>
             </button>
-            <button id="fullScreen" class="toolbarButton"  title="${labels.VisualizadorDeArquivoPDFDados.telaCheia.tooltiptext}" tabindex="50">
+            <button id="fullScreen" class="toolbarButton"
+                title="${labels.VisualizadorDeArquivoPDFDados.telaCheia.tooltiptext}" tabindex="50">
                 <i class="fas fa-expand"></i>
             </button>
         </div>
@@ -93,5 +111,7 @@
     </div>
 
     <script type="module" src="../javascript/config.js"></script>
+    <script type="module" src="../javascript/useCase.js"></script>
 </body>
+
 </html>
