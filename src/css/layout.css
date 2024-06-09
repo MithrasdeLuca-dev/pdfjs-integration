@@ -17,7 +17,10 @@ body {
     overflow: hidden;
     background-color: #38383d;
     height: calc(100% - 30px);
+    scrollbar-color: #79797b #232327;
 }
+
+
 
 #thumbnailContainer {
     display: flex;
@@ -61,6 +64,7 @@ body {
     left: 0;
     width: 100%;
 }
+
 .highlight {
     background-color: yellow;
 }

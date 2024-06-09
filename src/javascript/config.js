@@ -1,13 +1,15 @@
-import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.mjs';
-import * as pdfjsViewer from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf_viewer.mjs';
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.min.mjs';
+import * as pdfjsViewer from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf_viewer.mjs';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs';
 
-const url = '../../media/contrato.pdf';
+const url = '../../media/content.pdf';
 
 const permission = document.getElementById('permission');
 const container = document.getElementById('viewerContainer');
 const thumbnailContainer = document.getElementById('thumbnailContainer');
+const findResultCount = document.getElementById('findResultsCount');
+
 const eventBus = new pdfjsViewer.EventBus();
 
 const pdfLinkService = new pdfjsViewer.PDFLinkService({
@@ -35,6 +37,7 @@ pdfjsLib.getDocument(url).promise.then(function (pdfDoc) {
     pdfViewer.setDocument(pdfDoc);
     pdfLinkService.setDocument(pdfDoc, null);
     document.getElementById('numPages').textContent = "/ " + pdfDoc.numPages;
+    document.getElementById('pageNumber').value = '1';
     renderThumbnails(pdfDoc);
 }).catch(function (error) {
     console.error('Erro ao carregar o documento PDF:', error);
@@ -130,6 +133,24 @@ eventBus.on('pagechanging', (evt) => {
     scrollToPage(evt.pageNumber);
 });
 
+eventBus.on('updatefindmatchescount', (event) => {
+    if (event.matchesCount.total > 0) {
+        findResultCount.textContent = event.matchesCount.current + " / " + event.matchesCount.total;
+        findResultCount.style.display = "block";
+    } else {
+        findResultCount.style.display = "none";
+    }
+});
+
+// Controle a exibição do contador de resultados no evento `updatefindcontrolstate`
+eventBus.on('updatefindcontrolstate', (event) => {
+    if (event.state === 3) { // Estado de busca concluída
+        findResultCount.style.display = "block";
+    } else {
+        findResultCount.style.display = "none";
+    }
+});
+
 window.addEventListener('resize', () => {
     pdfViewer.currentScaleValue = 'auto';
 });
@@ -151,5 +172,5 @@ window.addEventListener('contextmenu', (event) => {
     }
 });
 
-export { eventBus, pdfViewer, url };
+export { eventBus, pdfDocument, pdfFindController, pdfLinkService, pdfViewer, url };
 

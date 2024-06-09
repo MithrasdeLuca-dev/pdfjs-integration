@@ -1,13 +1,5 @@
 import { eventBus, pdfViewer, url } from './config.js';
 
-const sidebarToggleBtn = document.getElementById('sidebarToggle');
-sidebarToggleBtn.addEventListener('click', () => {
-    const thumbnailContainer = document.getElementById('thumbnailContainer');
-    const viewerContainer = document.getElementById('viewerContainer');
-    thumbnailContainer.classList.toggle('recolher');
-    viewerContainer.classList.toggle('recolher');
-});
-
 document.getElementById('permission').addEventListener('change', () => {
     const permission = document.getElementById('permission');
     const downloadButton = document.getElementById('download');
@@ -31,15 +23,19 @@ document.getElementById('search-icon').addEventListener('click', () => {
     findBar.style.display = findBar.style.display === 'none' ? 'block' : 'none';
 });
 
-let previousSearchTerm = '';
-let currentMatchPage = null;
-let currentMatchIndex = null;
+function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
 
-document.getElementById('findInput').addEventListener('input', (event) => {
+document.getElementById('findInput').addEventListener('input', debounce((event) => {
     const searchTerm = event.target.value;
+
     const options = {
-        source: this,
-        type: 'find',
+        source: event.target,
         query: searchTerm,
         phraseSearch: true,
         caseSensitive: false,
@@ -51,61 +47,33 @@ document.getElementById('findInput').addEventListener('input', (event) => {
     if (searchTerm) {
         eventBus.dispatch('find', options);
     } else {
-        eventBus.dispatch('findbarclose', { source: this });
+        eventBus.dispatch('findbarclose', { source: event.target });
     }
-});
-
-eventBus.on('updatefindcontrolstate', (event) => {
-    const currentSearchTerm = event.rawQuery;
-
-    if (currentSearchTerm !== previousSearchTerm) {
-        previousSearchTerm = currentSearchTerm;
-
-        // Obter posição atual e página da correspondência
-        const currentPosition = event.matchesCount.current;
-        const currentPage = event.source._selected.pageIdx;
-
-        // Atualizar variáveis de estado
-        currentMatchPage = currentPage;
-        currentMatchIndex = currentPosition;
-
-        console.log('Pesquisa mudou. Atualizando correspondência:', currentSearchTerm);
-        console.log('Posição atual:', currentPosition, 'Página atual:', currentPage);
-    } else {
-        // Se a pesquisa não mudou, mantenha a correspondência atual
-        console.log('Pesquisa não mudou. Mantendo correspondência atual.');
-
-        // Manter a visualização na página e posição atuais
-        if (currentMatchPage !== null && currentMatchIndex !== null) {
-            // Lógica para forçar a página e a posição atuais
-            pdfViewer.currentPageNumber = currentMatchPage + 1; // Ajuste conforme necessário
-            // Note: Pode ser necessário adicionar lógica adicional para destacar a correspondência específica na página
-        }
-    }
-});
-
-eventBus.on('updatetextlayermatches', (event) => {
-    if (currentMatchPage !== null && currentMatchIndex !== null) {
-        console.log(currentMatchPage + 1)
-        pdfViewer.currentPageNumber = currentMatchPage + 1; // Ajuste conforme necessário
-        // Note: Pode ser necessário adicionar lógica adicional para destacar a correspondência específica na página
-    }
-});
+}, 400));
 
 
-document.getElementById('findNext').addEventListener('click', () => {
-    eventBus.dispatch('findagain', { source: this, findPrevious: false });
-});
 
 document.getElementById('findPrevious').addEventListener('click', () => {
-    eventBus.dispatch('findagain', { source: this, findPrevious: true });
+    const searchTerm = document.getElementById('findInput').value;
+    eventBus.dispatch('findagain', {
+        findPrevious: true
+    });
+
 });
 
-document.getElementById('findInput').addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        eventBus.dispatch('findagain', { source: this, findPrevious: false });
-    }
+document.getElementById('findNext').addEventListener('click', () => {
+    const searchTerm = document.getElementById('findInput').value;
+
+    eventBus.dispatch('findagain', {
+        findPrevious: false
+    });
 });
+
+eventBus.on('findagain', (evt) => {
+    console.log('findagain foi chamado:', evt);
+
+});
+
 
 document.getElementById('firstPage').addEventListener('click', () => {
     pdfViewer.currentPageNumber = 1;
