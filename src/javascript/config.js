@@ -1,7 +1,7 @@
-import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.min.mjs';
-import * as pdfjsViewer from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf_viewer.mjs';
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.mjs';
+import * as pdfjsViewer from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf_viewer.mjs';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.mjs';
 
 const url = '../../media/content.pdf';
 
@@ -9,6 +9,7 @@ const permission = document.getElementById('permission');
 const container = document.getElementById('viewerContainer');
 const thumbnailContainer = document.getElementById('thumbnailContainer');
 const findResultCount = document.getElementById('findResultsCount');
+const findMsg = document.getElementById('findMsg');
 
 const eventBus = new pdfjsViewer.EventBus();
 
@@ -91,28 +92,28 @@ function highlightCurrentThumbnail(pageNumber) {
 }
 
 function scrollToThumbnail(thumbnail) {
-    const toolbarHeight = 45; // Altura da toolbar em pixels
+    const toolbarHeight = 45;
     const thumbnailContainer = document.getElementById('thumbnailContainer');
     const containerTop = thumbnailContainer.scrollTop;
     const containerBottom = containerTop + thumbnailContainer.clientHeight;
-    const thumbnailTop = thumbnail.offsetTop - toolbarHeight; // Subtrai a altura da toolbar
+    const thumbnailTop = thumbnail.offsetTop - toolbarHeight;
     const thumbnailBottom = thumbnailTop + thumbnail.clientHeight;
 
     if (thumbnailTop < containerTop) {
         thumbnailContainer.scrollTo({
             top: thumbnailTop,
-            behavior: 'smooth' // Adiciona rolagem suave
+            behavior: 'smooth'
         });
     } else if (thumbnailBottom > containerBottom) {
         thumbnailContainer.scrollTo({
             top: thumbnailBottom - thumbnailContainer.clientHeight,
-            behavior: 'smooth' // Adiciona rolagem suave
+            behavior: 'smooth'
         });
     }
 }
 
 function scrollToPage(pageNumber) {
-    const toolbarHeight = 60; // Altura da toolbar em pixels
+    const toolbarHeight = 60;
     const pageElement = document.querySelector(`[data-page-number="${pageNumber}"]`);
     if (pageElement) {
         const offsetTop = pageElement.offsetTop - toolbarHeight;
@@ -142,12 +143,34 @@ eventBus.on('updatefindmatchescount', (event) => {
     }
 });
 
-// Controle a exibição do contador de resultados no evento `updatefindcontrolstate`
 eventBus.on('updatefindcontrolstate', (event) => {
-    if (event.state === 3) { // Estado de busca concluída
-        findResultCount.style.display = "block";
-    } else {
+    console.log(event.state)
+    if (!event.rawQuery) {
         findResultCount.style.display = "none";
+        return;
+    }
+
+    // Processa os estados da busca apenas se houver uma consulta válida
+    switch (event.state) {
+        case 0: // FIND_FOUND
+            findResultCount.textContent = event.matchesCount.current + " / " + event.matchesCount.total;
+            findResultCount.style.display = "block";
+            break;
+        case 1: // FIND_NOTFOUND
+            findResultCount.textContent = "Nenhuma correspondência encontrada";
+            findResultCount.style.display = "block";
+            break;
+        case 2: // FIND_WRAPPED
+            findResultCount.textContent = "Busca concluída, voltando ao início";
+            findResultCount.style.display = "block";
+            break;
+        case 3: // FIND_PENDING
+            findResultCount.textContent = "Buscando...";
+            findResultCount.style.display = "block";
+            break;
+        default:
+            findResultCount.style.display = "none"; // Oculta o contador para estados desconhecidos
+            break;
     }
 });
 

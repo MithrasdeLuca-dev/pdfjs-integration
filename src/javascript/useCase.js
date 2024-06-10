@@ -1,4 +1,4 @@
-import { eventBus, pdfViewer, url } from './config.js';
+import { eventBus, pdfFindController, pdfViewer, url } from './config.js';
 
 document.getElementById('permission').addEventListener('change', () => {
     const permission = document.getElementById('permission');
@@ -36,6 +36,7 @@ document.getElementById('findInput').addEventListener('input', debounce((event) 
 
     const options = {
         source: event.target,
+        type: "find",
         query: searchTerm,
         phraseSearch: true,
         caseSensitive: false,
@@ -44,36 +45,41 @@ document.getElementById('findInput').addEventListener('input', debounce((event) 
         findPrevious: false
     };
 
-    if (searchTerm) {
-        eventBus.dispatch('find', options);
-    } else {
-        eventBus.dispatch('findbarclose', { source: event.target });
-    }
+    eventBus.dispatch('find', options);
+
 }, 400));
 
-
-
-document.getElementById('findPrevious').addEventListener('click', () => {
-    const searchTerm = document.getElementById('findInput').value;
-    eventBus.dispatch('findagain', {
+document.getElementById('findPrevious').addEventListener('click', function () {
+    const search = document.getElementById('findInput').value;
+    eventBus.dispatch('find', {
+        source: pdfFindController,
+        type: "again",
+        query: search,
+        phraseSearch: true,
+        caseSensitive: false,
+        entireWord: false,
+        highlightAll: true,
         findPrevious: true
     });
-
 });
 
-document.getElementById('findNext').addEventListener('click', () => {
-    const searchTerm = document.getElementById('findInput').value;
-
-    eventBus.dispatch('findagain', {
+document.getElementById('findNext').addEventListener('click', function () {
+    const search = document.getElementById('findInput').value;
+    eventBus.dispatch('find', {
+        source: pdfFindController,
+        type: "again",
+        query: search,
+        phraseSearch: true,
+        caseSensitive: false,
+        entireWord: false,
+        highlightAll: true,
         findPrevious: false
     });
 });
 
-eventBus.on('findagain', (evt) => {
-    console.log('findagain foi chamado:', evt);
-
-});
-
+// eventBus.on('find', (evt) => {
+//     console.log("find again chamado", evt);
+// });
 
 document.getElementById('firstPage').addEventListener('click', () => {
     pdfViewer.currentPageNumber = 1;
@@ -143,11 +149,11 @@ document.getElementById('fullScreen').addEventListener('click', () => {
     const elem = document.getElementById('viewerContainer');
     if (elem.requestFullscreen) {
         elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) { // Firefox
+    } else if (elem.mozRequestFullScreen) {
         elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+    } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { // IE/Edge
+    } else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
     }
     elem.style.overflow = 'auto';

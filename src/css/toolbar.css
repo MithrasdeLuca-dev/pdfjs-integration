@@ -96,6 +96,8 @@
 
 #numPages {
     color: #fff;
+    text-align: center;
+    padding: 1px 5px 1px 5px;
 }
 
 #download,
@@ -147,8 +149,17 @@
     margin-right: 5px;
 }
 
-#findResultsCount {
+#findbarMessageContainer span {
+    border-radius: 2px;
+    background-color: #d9d9d9;
+    color: #525252;
+}
+
+#findbarMessageContainer {
     padding: 1px 5px 1px 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     border-radius: 2px;
     background-color: #d9d9d9;
     color: #525252;
