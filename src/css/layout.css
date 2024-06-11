@@ -15,12 +15,10 @@ body {
 #mainContainer {
     display: flex;
     overflow: hidden;
-    background-color: #38383d;
+    background-color: #2a2a2e;
     height: calc(100% - 30px);
     scrollbar-color: #79797b #232327;
 }
-
-
 
 #thumbnailContainer {
     display: flex;

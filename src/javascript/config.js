@@ -8,6 +8,7 @@ const url = '../../media/content.pdf';
 const permission = document.getElementById('permission');
 const container = document.getElementById('viewerContainer');
 const thumbnailContainer = document.getElementById('thumbnailContainer');
+const findbarMessageContainer = document.getElementById('findbarMessageContainer');
 const findResultCount = document.getElementById('findResultsCount');
 const findMsg = document.getElementById('findMsg');
 
@@ -144,34 +145,23 @@ eventBus.on('updatefindmatchescount', (event) => {
 });
 
 eventBus.on('updatefindcontrolstate', (event) => {
-    console.log(event.state)
-    if (!event.rawQuery) {
-        findResultCount.style.display = "none";
-        return;
-    }
+    let message = "";
+    let isActive = false;
 
-    // Processa os estados da busca apenas se houver uma consulta válida
-    switch (event.state) {
-        case 0: // FIND_FOUND
-            findResultCount.textContent = event.matchesCount.current + " / " + event.matchesCount.total;
-            findResultCount.style.display = "block";
-            break;
-        case 1: // FIND_NOTFOUND
-            findResultCount.textContent = "Nenhuma correspondência encontrada";
-            findResultCount.style.display = "block";
-            break;
-        case 2: // FIND_WRAPPED
-            findResultCount.textContent = "Busca concluída, voltando ao início";
-            findResultCount.style.display = "block";
-            break;
-        case 3: // FIND_PENDING
-            findResultCount.textContent = "Buscando...";
-            findResultCount.style.display = "block";
-            break;
-        default:
-            findResultCount.style.display = "none"; // Oculta o contador para estados desconhecidos
-            break;
+    if (event.rawQuery) {
+        switch (event.state) {
+            case 0:
+                message = event.matchesCount.current + " / " + event.matchesCount.total;
+                isActive = true;
+                break;
+            case 1:
+                message = "Nenhuma correspondência encontrada";
+                isActive = true;
+                break;
+        }
     }
+    findResultCount.textContent = message;
+    findbarMessageContainer.classList.toggle('active', isActive);
 });
 
 window.addEventListener('resize', () => {

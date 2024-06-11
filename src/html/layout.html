@@ -26,13 +26,37 @@
         <div id="findBar" class="findBar">
             <div class="findBar-arrow"></div>
             <div class="findBar-content">
-                <input id="findInput" type="text" placeholder="Pesquisar no documento">
-                <button id="findPrevious" class="toolbarButton">
-                    <i class="fa-solid fa-angle-left"></i>
-                </button>
-                <button id="findNext" class="toolbarButton">
-                    <i class="fa-solid fa-angle-right"></i>
-                </button>
+
+                <span class="loadingInput">
+                    <input id="findInput" type="text" placeholder="Pesquisar no documento">
+                    <i id="loadingIcon" class="fa-solid fa-spinner fa-spin-pulse"></i>
+                </span>
+
+                <div id="findbarInputContainer">
+                    <button id="findPrevious" class="toolbarButton">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </button>
+                    <button id="findNext" class="toolbarButton">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
+
+                <div id="findbarOptionsOneContainer">
+                    <input type="checkbox" id="findHighlightAll" class="toolbarField" tabindex="94">
+                    <label for="findHighlightAll" class="toolbarLabel"
+                        data-l10n-id="pdfjs-find-highlight-checkbox">Highlight All</label>
+                    <input type="checkbox" id="findMatchCase" class="toolbarField" tabindex="95">
+                    <label for="findMatchCase" class="toolbarLabel"
+                        data-l10n-id="pdfjs-find-match-case-checkbox-label">Match Case</label>
+                </div>
+                <div id="findbarOptionsTwoContainer">
+                    <input type="checkbox" id="findMatchDiacritics" class="toolbarField" tabindex="96">
+                    <label for="findMatchDiacritics" class="toolbarLabel"
+                        data-l10n-id="pdfjs-find-match-diacritics-checkbox-label">Match Diacritics</label>
+                    <input type="checkbox" id="findEntireWord" class="toolbarField" tabindex="97">
+                    <label for="findEntireWord" class="toolbarLabel"
+                        data-l10n-id="pdfjs-find-entire-word-checkbox-label">Whole Words</label>
+                </div>
 
                 <div id="findbarMessageContainer" aria-live="polite">
                     <span id="findResultsCount"></span>

@@ -8,9 +8,8 @@
     justify-content: space-between;
     padding: 0 10px;
     position: relative;
-    /* Adicionado para posicionamento relativo da findBar */
     z-index: 10;
-    /* Garantir que a toolbar esteja acima do conteúdo do PDF */
+    font-family: 'Roboto', sans-serif;
 }
 
 .toolbarSection {
@@ -61,7 +60,7 @@
     border: none;
     border-radius: 4px;
     height: 100%;
-    padding: 0 10px 0 0;
+    padding: 0 10px;
     outline: none;
     transition: background-color 0.3s ease;
 }
@@ -75,91 +74,120 @@
     outline: none;
 }
 
-#findBox {
-    display: flex;
-    align-items: center;
-    transition: width 0.3s ease;
-    position: relative;
-}
-
-#findInput {
+.loadingInput {
     background-color: #404044;
-    color: #fff;
     border-radius: 2px;
     border: 1px solid #737373;
     padding: 5px;
     width: 200px;
-    /* Largura da caixa de pesquisa */
+}
+
+#loadingIcon.active {
+    visibility: visible;
+}
+
+#loadingIcon {
+    visibility: hidden;
+    font-size: 12px;
+}
+
+#findInput {
+    background: none;
     outline: none;
-    /* Remove a linha de foco */
+    border: none;
+    color: #fff;
+    font-size: 12px;
 }
 
 #numPages {
     color: #fff;
     text-align: center;
-    padding: 1px 5px 1px 5px;
+    padding: 1px 5px;
 }
 
+#findbarMessageContainer,
 #download,
 #print {
     display: none;
 }
 
+.findBar.disabled {
+    display: block;
+}
+
 .findBar {
     display: none;
-
     position: absolute;
     top: 45px;
-    /* Ajuste para ficar logo abaixo da toolbar */
     left: 52px;
-    /* Ajuste conforme necessário */
     background-color: #38383D;
     border-radius: 2px;
-    padding: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 3px 5px 3px 5px;
     z-index: 20;
-    /* Garantir que a findBar esteja acima do conteúdo do PDF */
 }
 
 .findBar-arrow {
     position: absolute;
     top: -10px;
     left: 20px;
-    /* Ajuste conforme necessário */
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-bottom: 10px solid #38383D;
-    /* Cor de fundo da seta */
 }
 
-
-.findBar-content {
+.findBar-content,
+.loadingInput,
+#findbarInputContainer,
+#findbarOptionsOneContainer,
+#findbarOptionsTwoContainer,
+#findbarMessageContainer {
     display: flex;
+    justify-content: space-around;
     align-items: center;
-    margin-right: 10px
-}
-
-.findBar-content input {
-    margin-right: 10px;
-}
-
-.findBar-content button {
     margin-right: 5px;
 }
 
-#findbarMessageContainer span {
+.toolbarField[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+}
+
+.toolbarLabel {
+    min-width: 16px;
+    padding: 7px;
+    margin-right: 4px;
+    border-radius: 2px;
+    color: #fafafa;
+    font-size: 12px;
+    text-align: center;
+    user-select: none;
+    cursor: default;
+}
+
+.toolbarField[type="checkbox"]:checked+.toolbarLabel {
+    background-color: #27272b !important;
+    color: #fafafa;
+}
+
+.toolbarLabel:hover,
+.toolbarField:focus-visible+.toolbarLabel {
+    background-color: #666667;
+}
+
+#findbarMessageContainer.active {
+    display: block;
+    font-size: 12px;
+    padding: 3px 8px;
     border-radius: 2px;
     background-color: #d9d9d9;
     color: #525252;
 }
 
-#findbarMessageContainer {
-    padding: 1px 5px 1px 5px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+#findbarMessageContainer span {
     border-radius: 2px;
     background-color: #d9d9d9;
     color: #525252;

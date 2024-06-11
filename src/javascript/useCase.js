@@ -18,18 +18,28 @@ document.getElementById('permission').addEventListener('change', () => {
     }
 });
 
-document.getElementById('search-icon').addEventListener('click', () => {
-    const findBar = document.getElementById('findBar');
-    findBar.style.display = findBar.style.display === 'none' ? 'block' : 'none';
+const sidebarToggleBtn = document.getElementById('sidebarToggle');
+sidebarToggleBtn.addEventListener('click', () => {
+    const thumbnailContainer = document.getElementById('thumbnailContainer');
+    const viewerContainer = document.getElementById('viewerContainer');
+    thumbnailContainer.classList.toggle('recolher');
+    viewerContainer.classList.toggle('recolher');
 });
 
+// Debounce function to limit the rate at which a function can fire.
 function debounce(func, wait) {
     let timeout;
     return function (...args) {
+        const context = this;
         clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
+        timeout = setTimeout(() => func.apply(context, args), wait);
     };
 }
+
+document.getElementById('search-icon').addEventListener('click', () => {
+    const findBar = document.getElementById('findBar');
+    findBar.classList.toggle('disabled');
+});
 
 document.getElementById('findInput').addEventListener('input', debounce((event) => {
     const searchTerm = event.target.value;
@@ -45,9 +55,15 @@ document.getElementById('findInput').addEventListener('input', debounce((event) 
         findPrevious: false
     };
 
-    eventBus.dispatch('find', options);
+    // Show loading icon
+    document.getElementById('loadingIcon').classList.add('active');
 
-}, 400));
+    // Simulate async search (replace this with your actual search logic)
+    setTimeout(() => {
+        document.getElementById('loadingIcon').classList.remove('active');
+        eventBus.dispatch('find', options);
+    }, 700); // Simulate 700ms delay, replace with actual search delay if needed
+}, 300)); // Adjust debounce delay as needed
 
 document.getElementById('findPrevious').addEventListener('click', function () {
     const search = document.getElementById('findInput').value;
@@ -76,10 +92,6 @@ document.getElementById('findNext').addEventListener('click', function () {
         findPrevious: false
     });
 });
-
-// eventBus.on('find', (evt) => {
-//     console.log("find again chamado", evt);
-// });
 
 document.getElementById('firstPage').addEventListener('click', () => {
     pdfViewer.currentPageNumber = 1;
