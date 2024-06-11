@@ -1,10 +1,14 @@
+// Importações dos módulos PDF.js necessários
 import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.mjs';
 import * as pdfjsViewer from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf_viewer.mjs';
 
+// Configuração do URL do worker do PDF.js
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.mjs';
 
+// URL do documento PDF
 const url = '../../media/content.pdf';
 
+// Elementos HTML importantes
 const permission = document.getElementById('permission');
 const container = document.getElementById('viewerContainer');
 const thumbnailContainer = document.getElementById('thumbnailContainer');
@@ -12,28 +16,21 @@ const findbarMessageContainer = document.getElementById('findbarMessageContainer
 const findResultCount = document.getElementById('findResultsCount');
 const findMsg = document.getElementById('findMsg');
 
+// Instância do EventBus do PDF.js
 const eventBus = new pdfjsViewer.EventBus();
 
-const pdfLinkService = new pdfjsViewer.PDFLinkService({
-    eventBus: eventBus,
-});
+// Serviços e controladores do PDF.js
+const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
+const pdfFindController = new pdfjsViewer.PDFFindController({ eventBus, linkService: pdfLinkService });
+const pdfViewer = new pdfjsViewer.PDFViewer({ container, eventBus, linkService: pdfLinkService, findController: pdfFindController });
 
-const pdfFindController = new pdfjsViewer.PDFFindController({
-    eventBus: eventBus,
-    linkService: pdfLinkService,
-});
-
-const pdfViewer = new pdfjsViewer.PDFViewer({
-    container: container,
-    eventBus: eventBus,
-    linkService: pdfLinkService,
-    findController: pdfFindController,
-});
-
+// Configuração do serviço de links e do visualizador PDF
 pdfLinkService.setViewer(pdfViewer);
 
+// Variável para armazenar o documento PDF
 let pdfDocument = null;
 
+// Carregamento do documento PDF
 pdfjsLib.getDocument(url).promise.then(function (pdfDoc) {
     pdfDocument = pdfDoc;
     pdfViewer.setDocument(pdfDoc);
@@ -45,6 +42,7 @@ pdfjsLib.getDocument(url).promise.then(function (pdfDoc) {
     console.error('Erro ao carregar o documento PDF:', error);
 });
 
+// Renderização de miniaturas das páginas do PDF
 function renderThumbnails(pdfDoc) {
     const promises = [];
     for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
@@ -80,6 +78,7 @@ function renderThumbnails(pdfDoc) {
     });
 }
 
+// Destaca a miniatura da página atual
 function highlightCurrentThumbnail(pageNumber) {
     const thumbnails = document.querySelectorAll('.thumbnail');
     thumbnails.forEach(thumbnail => {
@@ -92,6 +91,7 @@ function highlightCurrentThumbnail(pageNumber) {
     });
 }
 
+// Rolamento para a miniatura da página atual
 function scrollToThumbnail(thumbnail) {
     const toolbarHeight = 45;
     const thumbnailContainer = document.getElementById('thumbnailContainer');
@@ -113,6 +113,7 @@ function scrollToThumbnail(thumbnail) {
     }
 }
 
+// Rolamento para a página específica
 function scrollToPage(pageNumber) {
     const toolbarHeight = 60;
     const pageElement = document.querySelector(`[data-page-number="${pageNumber}"]`);
@@ -125,6 +126,7 @@ function scrollToPage(pageNumber) {
     }
 }
 
+// Assinaturas de eventos
 eventBus.on('pagesinit', () => {
     pdfViewer.currentScaleValue = 'auto';
 });
@@ -164,10 +166,12 @@ eventBus.on('updatefindcontrolstate', (event) => {
     findbarMessageContainer.classList.toggle('active', isActive);
 });
 
+// Atualização automática do zoom ao redimensionar a janela
 window.addEventListener('resize', () => {
     pdfViewer.currentScaleValue = 'auto';
 });
 
+// Bloqueio de comandos de impressão e cópia em determinadas situações
 window.addEventListener('keydown', (event) => {
     if ((event.ctrlKey && (event.key === 'p' || event.key === 's' || event.key === 'c')) ||
         (event.key === 'Insert' && event.ctrlKey)) {
@@ -185,5 +189,6 @@ window.addEventListener('contextmenu', (event) => {
     }
 });
 
+// Exportação dos elementos importantes
 export { eventBus, pdfDocument, pdfFindController, pdfLinkService, pdfViewer, url };
 
