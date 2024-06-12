@@ -59,7 +59,6 @@ import { eventBus, pdfFindController, pdfViewer, url } from './config.js';
         }
 
         eventBus.dispatch('find', options);
-        console.log(options);
     };
 
     document.getElementById('search-icon').addEventListener('click', () => {
@@ -99,10 +98,10 @@ import { eventBus, pdfFindController, pdfViewer, url } from './config.js';
         dispatchFindEvent('diacriticmatchingchange');
     });
 
-    eventBus.on('find', eventData => {
-        console.log("Evento 'find' recebido:", eventData);
-        // Você pode adicionar outras ações com base no tipo de evento
-    });
+    // eventBus.on('find', eventData => {
+    //     console.log("Evento 'find' recebido:", eventData);
+    //     // Você pode adicionar outras ações com base no tipo de evento
+    // });
 }
 
 // Funções de Navegação no PDF

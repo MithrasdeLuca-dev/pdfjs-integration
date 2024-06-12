@@ -17,7 +17,7 @@
     align-items: center;
     justify-content: space-around;
     height: 100%;
-    margin-right: 20px;
+    margin-right: 5px;
 }
 
 .toolbarButton {
@@ -102,7 +102,6 @@
     padding: 1px 5px;
 }
 
-#findbarMessageContainer,
 #download,
 #print {
     display: none;
@@ -135,18 +134,26 @@
     border-bottom: 10px solid #38383D;
 }
 
-#findbarMessageContainer.active {
-    display: block;
+
+#findbarMessageContainer {
+    display: none;
+    background-color: #d9d9d9 !important;
     font-size: 12px;
     padding: 3px 8px;
     border-radius: 2px;
-    background-color: #d9d9d9;
     color: #525252;
 }
 
+#findbarMessageContainer.active {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 #findbarMessageContainer span {
-    border-radius: 2px;
-    background-color: #d9d9d9;
+    text-align: center;
+    margin-right: 5px;
+    background: none;
     color: #525252;
 }
 
@@ -154,8 +161,7 @@
 .loadingInput,
 #findbarInputContainer,
 #findbarOptionsOneContainer,
-#findbarOptionsTwoContainer,
-#findbarMessageContainer {
+#findbarOptionsTwoContainer {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -163,7 +169,7 @@
 }
 
 /* Esconde as checkboxes */
-input[type="checkbox"] {
+input[type="checkbox"].toolbarField {
     display: none;
 }
 

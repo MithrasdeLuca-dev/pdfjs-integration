@@ -137,34 +137,41 @@ eventBus.on('pagechanging', (evt) => {
     scrollToPage(evt.pageNumber);
 });
 
+
+// Evento para atualizar a contagem de correspondências encontradas
 eventBus.on('updatefindmatchescount', (event) => {
     if (event.matchesCount.total > 0) {
-        findResultCount.textContent = event.matchesCount.current + " / " + event.matchesCount.total;
-        findResultCount.style.display = "block";
-    } else {
-        findResultCount.style.display = "none";
+        updateFindMessage(event.matchesCount, true);
     }
 });
 
+// Evento para atualizar o estado do controle de busca
 eventBus.on('updatefindcontrolstate', (event) => {
-    let message = "";
-    let isActive = false;
-
     if (event.rawQuery) {
-        switch (event.state) {
-            case 0:
-                message = event.matchesCount.current + " / " + event.matchesCount.total;
-                isActive = true;
-                break;
-            case 1:
-                message = "Nenhuma correspondência encontrada";
-                isActive = true;
-                break;
+        if (event.state === 0) {
+            updateFindMessage(event.matchesCount);
+        } else if (event.state === 1) {
+            findResultCount.style.display = "none";
+            findMsg.textContent = "Nenhuma correspondência encontrada";
+            findbarMessageContainer.classList.toggle('active', true);
         }
+    } else {
+        findbarMessageContainer.classList.remove('active', false);
     }
-    findResultCount.textContent = message;
-    findbarMessageContainer.classList.toggle('active', isActive);
 });
+
+// Função para atualizar a mensagem de correspondência
+function updateFindMessage(matchesCount, isActive = false) {
+    findResultCount.textContent = `${matchesCount.current} / ${matchesCount.total}`;
+
+    if (matchesCount.total > 1) {
+        findMsg.textContent = "correspondencias"
+    } else if (matchesCount.total === 1) {
+        findMsg.textContent = "correspondencia";
+    }
+    findbarMessageContainer.classList.toggle('active', isActive);
+}
+
 
 // Atualização automática do zoom ao redimensionar a janela
 window.addEventListener('resize', () => {
