@@ -1,5 +1,21 @@
 import { eventBus, pdfFindController, pdfViewer, url } from './config.js';
 
+const permission = document.getElementById('permission');
+const downloadButton = document.getElementById('download');
+const printButton = document.getElementById('print');
+
+if (permission.checked) {
+    downloadButton.style.display = 'inline-block';
+    printButton.style.display = 'inline-block';
+    downloadButton.disabled = false;
+    printButton.disabled = false;
+} else {
+    downloadButton.style.display = 'none';
+    printButton.style.display = 'none';
+    downloadButton.disabled = true;
+    printButton.disabled = true;
+}
+
 // Configuração de Permissões e Interface
 {
     document.getElementById('permission').addEventListener('change', () => {
@@ -61,11 +77,34 @@ import { eventBus, pdfFindController, pdfViewer, url } from './config.js';
         eventBus.dispatch('find', options);
     };
 
-    document.getElementById('search-icon').addEventListener('click', () => {
-        const findBar = document.getElementById('findBar');
-        findBar.classList.toggle('disabled');
+    // Bloco para abrir e fechar a findbar "pesquisa"
+    document.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+            findBarOpenORClose();
+            event.preventDefault(); //
+        }
     });
 
+    document.addEventListener('keydown', (event) => {
+        const findBar = document.getElementById('findBar');
+        if (event.key === 'Escape' && findBar.classList.contains('active')) {
+            findBarOpenORClose();
+            event.preventDefault(); // Previne a ação padrão do navegador
+        }
+    });
+
+    document.getElementById('search-icon').addEventListener('click', () => {
+        findBarOpenORClose();
+    });
+
+    const findBarOpenORClose = () => {
+        const findBar = document.getElementById('findBar');
+        const findBox = document.getElementById('findBox');
+        findBox.classList.toggle('focus');
+        findBar.classList.toggle('active');
+    };
+
+    // Bloco de botões da findbar "pesquisa"
     document.getElementById('findInput').addEventListener('input', debounce((event) => {
         document.getElementById('loadingIcon').classList.add('active');
         setTimeout(() => {
@@ -79,7 +118,7 @@ import { eventBus, pdfFindController, pdfViewer, url } from './config.js';
     });
 
     document.getElementById('findNext').addEventListener('click', function () {
-        dispatchFindEvent('again');
+        dispatchFindEvent('again', false);
     });
 
     document.getElementById('findHighlightAll').addEventListener('change', function () {

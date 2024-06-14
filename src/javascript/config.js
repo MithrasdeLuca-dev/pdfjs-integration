@@ -22,7 +22,13 @@ const eventBus = new pdfjsViewer.EventBus();
 // Serviços e controladores do PDF.js
 const pdfLinkService = new pdfjsViewer.PDFLinkService({ eventBus });
 const pdfFindController = new pdfjsViewer.PDFFindController({ eventBus, linkService: pdfLinkService });
-const pdfViewer = new pdfjsViewer.PDFViewer({ container, eventBus, linkService: pdfLinkService, findController: pdfFindController });
+const pdfViewer = new pdfjsViewer.PDFViewer({
+    container,
+    eventBus,
+    textLayerMode: 1,
+    linkService: pdfLinkService,
+    findController: pdfFindController
+});
 
 // Configuração do serviço de links e do visualizador PDF
 pdfLinkService.setViewer(pdfViewer);
@@ -149,7 +155,7 @@ eventBus.on('updatefindmatchescount', (event) => {
 eventBus.on('updatefindcontrolstate', (event) => {
     if (event.rawQuery) {
         if (event.state === 0) {
-            updateFindMessage(event.matchesCount);
+            updateFindMessage(event.matchesCount, true);
         } else if (event.state === 1) {
             findResultCount.style.display = "none";
             findMsg.textContent = "Nenhuma correspondência encontrada";
@@ -161,9 +167,9 @@ eventBus.on('updatefindcontrolstate', (event) => {
 });
 
 // Função para atualizar a mensagem de correspondência
-function updateFindMessage(matchesCount, isActive = false) {
+function updateFindMessage(matchesCount, isActive) {
     findResultCount.textContent = `${matchesCount.current} / ${matchesCount.total}`;
-
+    findResultCount.style.display = "block";
     if (matchesCount.total > 1) {
         findMsg.textContent = "correspondencias"
     } else if (matchesCount.total === 1) {
@@ -188,6 +194,7 @@ window.addEventListener('keydown', (event) => {
         }
     }
 });
+
 
 window.addEventListener('contextmenu', (event) => {
     if (!permission.checked) {

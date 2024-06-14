@@ -27,11 +27,12 @@
     margin-right: 10px;
     font-size: 16px;
     border-radius: 4px;
-    padding: 5px;
-    transition: background-color 0.3s ease;
+    padding: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
 }
 
 .toolbarButton i {
@@ -68,7 +69,55 @@
     color: #fff;
     border: 1px solid #888;
     border-radius: 4px;
-    padding: 2px 5px;
+    padding: 7px 5px;
+}
+
+#pageNumber:focus {
+    border: 1px solid #007eff;
+}
+
+#numPages {
+    color: #fff;
+    text-align: center;
+    padding: 1px 5px;
+}
+
+#download,
+#print {
+    display: none;
+}
+
+.findBar.active {
+    display: block;
+}
+
+#findBox.focus {
+    background-color: #27272b !important;
+    border: 1px solid #007eff;
+    padding: 6px;
+}
+
+.findBar {
+    display: none;
+    position: absolute;
+    top: 45px;
+    left: 55px;
+    background-color: #38383D;
+    border-radius: 2px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 3px 5px 3px 5px;
+    z-index: 20;
+}
+
+.findBar-arrow {
+    position: absolute;
+    top: -10px;
+    left: 25px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #38383D;
 }
 
 .loadingInput {
@@ -77,6 +126,10 @@
     border: 1px solid #737373;
     padding: 5px;
     width: 200px;
+}
+
+.loadingInput:focus-within {
+    border: 1px solid #007eff;
 }
 
 #loadingIcon.active {
@@ -95,45 +148,6 @@
     color: #fff;
     font-size: 12px;
 }
-
-#numPages {
-    color: #fff;
-    text-align: center;
-    padding: 1px 5px;
-}
-
-#download,
-#print {
-    display: none;
-}
-
-.findBar.disabled {
-    display: block;
-}
-
-.findBar {
-    display: none;
-    position: absolute;
-    top: 45px;
-    left: 25px;
-    background-color: #38383D;
-    border-radius: 2px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 3px 5px 3px 5px;
-    z-index: 20;
-}
-
-.findBar-arrow {
-    position: absolute;
-    top: -10px;
-    left: 20px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #38383D;
-}
-
 
 #findbarMessageContainer {
     display: none;
@@ -183,12 +197,14 @@ input[type="checkbox"].toolbarField {
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 12px;
+    border: 1px solid #666667;
     transition: background-color 0.3s ease;
 }
 
 /* Estilo para checkbox marcado */
 input[type="checkbox"]:checked+.toolbarLabel {
     background-color: #27272b !important;
+    border: 1px solid #007eff;
 }
 
 /* Estilo de hover para a label */
