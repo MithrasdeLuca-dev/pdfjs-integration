@@ -93,7 +93,7 @@ if (permission.checked) {
         }
     });
 
-    document.getElementById('search-icon').addEventListener('click', () => {
+    document.getElementById('findBox').addEventListener('click', () => {
         findBarOpenORClose();
     });
 
