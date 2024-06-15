@@ -85,7 +85,6 @@ if (permission.checked) {
         const findInput = document.getElementById('findInput');
 
         if (findBar.classList.contains('active')) {
-            console.log('FindBar contém active')
             eventBus.dispatch('findbarclose');
         }
 
