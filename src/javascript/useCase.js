@@ -78,6 +78,23 @@ if (permission.checked) {
     };
 
     // Bloco para abrir e fechar a findbar "pesquisa"
+    const findBarOpenORClose = () => {
+
+        const findBox = document.getElementById('findBox');
+        const findBar = document.getElementById('findBar');
+        const findInput = document.getElementById('findInput');
+
+        if (findBar.classList.contains('active')) {
+            console.log('FindBar contém active')
+            eventBus.dispatch('findbarclose');
+        }
+
+        findBox.classList.toggle('focus');
+        findBar.classList.toggle('active');
+        findInput.focus();
+
+    };
+
     document.addEventListener('keydown', (event) => {
         if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
             findBarOpenORClose();
@@ -86,7 +103,6 @@ if (permission.checked) {
     });
 
     document.addEventListener('keydown', (event) => {
-        const findBar = document.getElementById('findBar');
         if (event.key === 'Escape' && findBar.classList.contains('active')) {
             findBarOpenORClose();
             event.preventDefault(); // Previne a ação padrão do navegador
@@ -97,18 +113,15 @@ if (permission.checked) {
         findBarOpenORClose();
     });
 
-    const findBarOpenORClose = () => {
-        const findBar = document.getElementById('findBar');
-        const findBox = document.getElementById('findBox');
-        findBox.classList.toggle('focus');
-        findBar.classList.toggle('active');
-    };
-
     // Bloco de botões da findbar "pesquisa"
     document.getElementById('findInput').addEventListener('input', debounce((event) => {
         document.getElementById('loadingIcon').classList.add('active');
         setTimeout(() => {
             document.getElementById('loadingIcon').classList.remove('active');
+
+            if (event.target.value === "") {
+                eventBus.dispatch('findbarclose');
+            }
             dispatchFindEvent('find');
         }, 700);
     }, 300));
@@ -119,6 +132,14 @@ if (permission.checked) {
 
     document.getElementById('findNext').addEventListener('click', function () {
         dispatchFindEvent('again', false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        const findBar = document.getElementById('findBar');
+        if (event.key === 'Enter' && findBar.classList.contains('active')) {
+            dispatchFindEvent('again', false);
+            event.preventDefault(); // Previne a ação padrão do navegador
+        }
     });
 
     document.getElementById('findHighlightAll').addEventListener('change', function () {

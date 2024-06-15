@@ -24,7 +24,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 200px;
-    background-color: #38383d;
+    background-color: #2a2a2e;
     border-right: 1px solid;
     overflow-y: auto;
     transition: width 0.3s;
