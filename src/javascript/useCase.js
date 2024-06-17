@@ -57,6 +57,7 @@ if (permission.checked) {
         };
     }
 
+    // Função find para verificar o tipo e enviar o envento de pesquisa no PDF
     const dispatchFindEvent = (type, findPrevious = false) => {
         const search = document.getElementById('findInput').value;
         const options = {
@@ -134,8 +135,8 @@ if (permission.checked) {
     });
 
     document.addEventListener('keydown', (event) => {
-        const findBar = document.getElementById('findBar');
-        if (event.key === 'Enter' && findBar.classList.contains('active')) {
+        const findInput = document.getElementById('findInput');
+        if (event.key === 'Enter' && findInput === document.activeElement) {
             dispatchFindEvent('again', false);
             event.preventDefault(); // Previne a ação padrão do navegador
         }
