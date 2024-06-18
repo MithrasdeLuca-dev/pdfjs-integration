@@ -87,18 +87,12 @@
     display: none;
 }
 
-.findBar.active {
-    display: block;
-}
-
-#findBox.focus {
-    background-color: #27272b !important;
-    border: 1px solid #007eff;
-    padding: 6px;
-}
-
 .findBar {
     display: none;
+}
+
+.findBar.active {
+    display: block;
     position: absolute;
     top: 45px;
     left: 55px;
@@ -108,6 +102,13 @@
     padding: 3px 5px 3px 5px;
     z-index: 20;
 }
+
+#findBox.focus {
+    background-color: #27272b !important;
+    border: 1px solid #007eff;
+    padding: 6px;
+}
+
 
 .findBar-arrow {
     position: absolute;

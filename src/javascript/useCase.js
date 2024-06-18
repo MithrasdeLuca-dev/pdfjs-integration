@@ -79,38 +79,40 @@ if (permission.checked) {
     };
 
     // Bloco para abrir e fechar a findbar "pesquisa"
-    const findBarOpenORClose = () => {
-
+    // Bloco para abrir e fechar a findbar "pesquisa"
+    const findBarOpenORClose = (isOpen) => {
         const findBox = document.getElementById('findBox');
         const findBar = document.getElementById('findBar');
         const findInput = document.getElementById('findInput');
 
-        if (findBar.classList.contains('active')) {
+        if (!isOpen) {
             eventBus.dispatch('findbarclose');
+            findBox.classList.remove('focus');
+            findBar.classList.remove('active');
+        } else {
+            findBox.classList.add('focus');
+            findBar.classList.add('active');
+            findInput.focus();
         }
-
-        findBox.classList.toggle('focus');
-        findBar.classList.toggle('active');
-        findInput.focus();
-
     };
 
     document.addEventListener('keydown', (event) => {
         if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
-            findBarOpenORClose();
-            event.preventDefault(); //
+            event.preventDefault(); // Previne a ação padrão do navegador
+            findBarOpenORClose(true); // Abre a barra
         }
     });
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && findBar.classList.contains('active')) {
-            findBarOpenORClose();
-            event.preventDefault(); // Previne a ação padrão do navegador
+        if (event.key === 'Escape') {
+            findBarOpenORClose(false); // Fecha a barra
+            event.preventDefault();
         }
     });
 
     document.getElementById('findBox').addEventListener('click', () => {
-        findBarOpenORClose();
+        const findBar = document.getElementById('findBar');
+        findBarOpenORClose(!findBar.classList.contains('active'));
     });
 
     // Bloco de botões da findbar "pesquisa"
